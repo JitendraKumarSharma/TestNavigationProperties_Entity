@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="EntityDatabaseModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Departments">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" />
+    <Property Name="Location" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'EntityDatabase.dbo.EmployeeDetails' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="EmployeeDetails">
+    <Key>
+      <PropertyRef Name="EmpDetailId" />
+    </Key>
+    <Property Name="EmpDetailId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Empld" Type="int" />
+    <Property Name="Address1" Type="varchar" MaxLength="100" />
+    <Property Name="ContactNumber" Type="varchar" MaxLength="15" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'EntityDatabase.dbo.EmployeeProjects' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="EmployeeProjects">
+    <Key>
+      <PropertyRef Name="ProjectId" />
+    </Key>
+    <Property Name="ProjectId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ProjectName" Type="varchar" MaxLength="100" />
+    <Property Name="EmpId" Type="int" />
+  </EntityType>
+  <EntityType Name="Employees">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FirstName" Type="nvarchar" MaxLength="50" />
+    <Property Name="LastName" Type="nvarchar" MaxLength="50" />
+    <Property Name="Gender" Type="nvarchar" MaxLength="50" />
+    <Property Name="Salary" Type="int" />
+    <Property Name="Departmentld" Type="int" />
+  </EntityType>
+  <Association Name="FK__EmployeeD__Empld__1CF15040">
+    <End Role="Employees" Type="Self.Employees" Multiplicity="0..1" />
+    <End Role="EmployeeDetails" Type="Self.EmployeeDetails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Employees">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="EmployeeDetails">
+        <PropertyRef Name="Empld" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__EmployeeP__EmpId__1ED998B2">
+    <End Role="Employees" Type="Self.Employees" Multiplicity="0..1" />
+    <End Role="EmployeeProjects" Type="Self.EmployeeProjects" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Employees">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="EmployeeProjects">
+        <PropertyRef Name="EmpId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Employees__Depar__1920BF5C">
+    <End Role="Departments" Type="Self.Departments" Multiplicity="0..1" />
+    <End Role="Employees" Type="Self.Employees" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Departments">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Employees">
+        <PropertyRef Name="Departmentld" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="EntityDatabaseModelStoreContainer">
+    <EntitySet Name="Departments" EntityType="Self.Departments" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Employees" EntityType="Self.Employees" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="EmployeeDetails" EntityType="Self.EmployeeDetails" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [EmployeeDetails].[EmpDetailId] AS [EmpDetailId], 
+    [EmployeeDetails].[Empld] AS [Empld], 
+    [EmployeeDetails].[Address1] AS [Address1], 
+    [EmployeeDetails].[ContactNumber] AS [ContactNumber]
+    FROM [dbo].[EmployeeDetails] AS [EmployeeDetails]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="EmployeeProjects" EntityType="Self.EmployeeProjects" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [EmployeeProjects].[ProjectId] AS [ProjectId], 
+    [EmployeeProjects].[ProjectName] AS [ProjectName], 
+    [EmployeeProjects].[EmpId] AS [EmpId]
+    FROM [dbo].[EmployeeProjects] AS [EmployeeProjects]</DefiningQuery>
+    </EntitySet>
+    <AssociationSet Name="FK__EmployeeD__Empld__1CF15040" Association="Self.FK__EmployeeD__Empld__1CF15040">
+      <End Role="Employees" EntitySet="Employees" />
+      <End Role="EmployeeDetails" EntitySet="EmployeeDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK__EmployeeP__EmpId__1ED998B2" Association="Self.FK__EmployeeP__EmpId__1ED998B2">
+      <End Role="Employees" EntitySet="Employees" />
+      <End Role="EmployeeProjects" EntitySet="EmployeeProjects" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Employees__Depar__1920BF5C" Association="Self.FK__Employees__Depar__1920BF5C">
+      <End Role="Departments" EntitySet="Departments" />
+      <End Role="Employees" EntitySet="Employees" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
